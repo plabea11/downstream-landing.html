@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downstream | Day Trading Education &amp; 1:1 Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0A1628;
+    --navy-mid:#0F2038;
+    --navy-panel:#122844;
+    --line: rgba(226,234,246,0.10);
+    --blue:#2F6FED;
+    --blue-light:#5B92F5;
+    --white:#F4F7FB;
+    --gray:#93A6C2;
+    --gray-dim:#5E7292;
+    --green:#22B366;
+    --red:#E5484D;
+    --radius:4px;
+    --max:1120px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--navy-deep);
+    color:var(--white);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,h4{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    line-height:1.12;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 32px;}
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--blue-light);
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--blue-light); display:inline-block;}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,22,40,0.9);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:72px;}
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Sora', sans-serif;
+    font-weight:700; font-size:19px;
+    letter-spacing:-0.01em;
+    color:var(--white);
+    text-transform:uppercase;
+  }
+  .logo svg{width:24px; height:24px; flex-shrink:0;}
+  .navlinks{display:flex; align-items:center; gap:36px; font-size:14px;}
+  .navlinks a{color:var(--gray); transition:color .2s ease; font-weight:500;}
+  .navlinks a:hover{color:var(--white);}
+  .navlinks a.cta-nav{
+    color:#fff;
+    background:var(--blue);
+    padding:10px 20px;
+    border-radius:var(--radius);
+    font-weight:600;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .navlinks a.cta-nav:hover{background:var(--blue-light); transform:translateY(-1px);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:110px 0 0;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(ellipse 900px 500px at 78% 15%, rgba(47,111,237,0.20), transparent 60%),
+      var(--navy-deep);
+  }
+  .hero .wrap{position:relative; z-index:2; padding-bottom:64px;}
+  .hero-inner{max-width:660px; padding-bottom:70px;}
+  .hero h1{
+    font-size:clamp(34px, 4.6vw, 54px);
+    margin:20px 0 22px;
+    color:var(--white);
+    text-transform:uppercase;
+  }
+  .hero p.lead{
+    font-size:17px;
+    color:var(--gray);
+    max-width:540px;
+    margin-bottom:16px;
+  }
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap;}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 26px;
+    border-radius:var(--radius);
+    font-weight:600; font-size:14.5px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:all .2s ease;
+  }
+  .btn-primary{background:var(--blue); color:#fff;}
+  .btn-primary:hover{background:var(--blue-light); transform:translateY(-1px);}
+  .btn-ghost{background:transparent; color:var(--white); border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--blue-light); color:var(--blue-light);}
+
+  /* ---- Background chart (ambient, not a UI widget) ---- */
+  .hero-bg-chart{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+  }
+
+  /* ---------- Sections generic ---------- */
+  section{padding:96px 0;}
+  .section-head{max-width:600px; margin-bottom:52px;}
+  .section-head h2{font-size:clamp(26px,3vw,36px); margin-top:16px; color:var(--white); text-transform:uppercase;}
+  .section-head p{color:var(--gray); margin-top:14px; font-size:15.5px;}
+
+  /* ---------- Philosophy ---------- */
+  .philosophy{background:var(--navy-mid); border-bottom:1px solid var(--line);}
+  .philosophy-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start;}
+  .philosophy-quote-box{
+    background:var(--navy-panel);
+    border:1px solid var(--line);
+    border-left:3px solid var(--blue);
+    padding:32px;
+    border-radius:var(--radius);
+  }
+  .philosophy-quote-box .mono{font-size:11px; color:var(--gray-dim); margin-bottom:14px; display:block; letter-spacing:0.1em;}
+  .philosophy-quote{
+    font-family:'Sora', sans-serif;
+    font-size:clamp(19px,2vw,24px);
+    font-weight:600;
+    color:var(--white);
+    line-height:1.35;
+  }
+  .compounding-stats{display:flex; gap:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .compounding-stat{flex:1; padding:22px 24px 22px 0;}
+  .compounding-stat:not(:first-child){padding-left:24px; border-left:1px solid var(--line);}
+  .compounding-stat .num{font-family:'Sora', sans-serif; font-weight:800; font-size:clamp(30px,3.4vw,42px); color:var(--white); line-height:1;}
+  .compounding-stat .label{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--gray); letter-spacing:0.12em; text-transform:uppercase; margin-top:10px;}
+  .compounding-caption{font-size:14.5px; color:var(--gray); margin-top:22px; line-height:1.6;}
+  .philosophy-points{display:flex; flex-direction:column; gap:26px;}
+  .philosophy-point{border-left:2px solid var(--line); padding-left:20px;}
+  .philosophy-point h4{font-size:15px; color:var(--white); margin-bottom:6px; font-family:'Inter',sans-serif; font-weight:600;}
+  .philosophy-point p{font-size:13.5px; color:var(--gray);}
+
+  /* ---------- Services ---------- */
+  .services-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .service-card{background:var(--navy-deep); padding:34px 28px; display:flex; flex-direction:column; min-height:260px;}
+  .service-card .mono{font-size:11px; color:var(--blue-light); margin-bottom:18px; letter-spacing:0.1em;}
+  .service-card h3{font-size:19px; color:var(--white); margin-bottom:12px; font-weight:700; text-transform:uppercase;}
+  .service-card p{font-size:14px; color:var(--gray); flex-grow:1;}
+  .service-card .price{margin-top:20px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--gray-dim); padding-top:16px; border-top:1px solid var(--line);}
+
+  /* ---------- How it works ---------- */
+  .how{background:var(--navy-mid); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .how-list{display:flex; flex-direction:column;}
+  .how-step{display:grid; grid-template-columns:70px 1fr; gap:26px; padding:30px 0; border-top:1px solid var(--line);}
+  .how-step:last-child{border-bottom:1px solid var(--line);}
+  .how-num{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--blue-light); padding-top:4px;}
+  .how-step h4{font-size:17px; color:var(--white); margin-bottom:8px; font-weight:700; font-family:'Sora', sans-serif; text-transform:uppercase;}
+  .how-step p{color:var(--gray); font-size:14px; max-width:520px;}
+
+  /* ---------- Booking ---------- */
+  .book-grid{display:grid; grid-template-columns:0.85fr 1.15fr; gap:60px; align-items:start;}
+  .book-side h2{font-size:clamp(26px,3vw,34px); margin-top:16px; color:var(--white); text-transform:uppercase;}
+  .book-side p{color:var(--gray); margin-top:14px; font-size:14.5px;}
+  .book-side .contact-line{margin-top:30px; padding-top:22px; border-top:1px solid var(--line); font-size:13.5px; color:var(--gray);}
+  .book-side .contact-line strong{color:var(--white); display:block; margin-bottom:6px; font-weight:600;}
+
+  form{background:var(--navy-panel); border:1px solid var(--line); padding:34px; border-radius:var(--radius);}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block; font-size:11px; font-family:'IBM Plex Mono', monospace; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue-light); margin-bottom:8px;}
+  .field input, .field select, .field textarea{
+    width:100%; background:var(--navy-deep); border:1px solid var(--line); color:var(--white);
+    padding:12px 14px; border-radius:var(--radius); font-family:'Inter', sans-serif; font-size:14px; outline:none;
+    transition:border-color .2s ease;
+  }
+  .field input::placeholder, .field textarea::placeholder{color:var(--gray-dim);}
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--blue);}
+  .field textarea{resize:vertical; min-height:90px;}
+  .form-submit{width:100%; justify-content:center; margin-top:4px; border:none;}
+  .form-note{font-size:12px; color:var(--gray-dim); margin-top:14px; line-height:1.5;}
+  .confirm-box{
+    display:none; background:rgba(47,111,237,0.12); border:1px solid var(--blue); color:var(--white);
+    padding:18px; border-radius:var(--radius); font-size:14px; margin-top:18px;
+  }
+  .confirm-box strong{color:var(--blue-light); display:block; margin-bottom:6px;}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line); padding:52px 0 36px;}
+  .footer-top{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:24px; padding-bottom:32px; border-bottom:1px solid var(--line);}
+  .footer-links{display:flex; gap:28px; font-size:13.5px; color:var(--gray);}
+  .footer-links a:hover{color:var(--blue-light);}
+  .disclaimer{margin-top:26px; font-size:11.5px; color:var(--gray-dim); line-height:1.7; max-width:820px;}
+  .footer-bottom{margin-top:22px; font-size:12px; color:var(--gray-dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    .navlinks{display:none;}
+    .philosophy-grid{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr;}
+    .book-grid{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .how-step{grid-template-columns:44px 1fr;}
+    .hero-strip{flex-direction:column;}
+    .hero-strip > div{border-right:none; border-bottom:1px solid var(--line);}
+    .chart-panel{padding:26px 16px 0;}
+    section{padding:64px 0;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">
+      <svg viewBox="0 0 28 28" fill="none">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#5B92F5"/>
+            <stop offset="100%" stop-color="#22B366"/>
+          </linearGradient>
+        </defs>
+        <path d="M2,22 H8 V16 H14 V10 H20 V4 H25" stroke="#5E7292" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+        <path d="M2,23 C7,20 6,14 12,13 C17,12 16,7 22,5 C24,4.3 25,4 26,3.6" stroke="url(#logoGrad)" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="26" cy="3.6" r="2.1" fill="#22B366"/>
+      </svg>
+      Downstream
+    </div>
+    <div class="navlinks">
+      <a href="#philosophy">Approach</a>
+      <a href="#services">Services</a>
+      <a href="#how">Process</a>
+      <a href="#book" class="cta-nav">Book a Consultation</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <svg class="hero-bg-chart" viewBox="0 0 1120 620" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="bgFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2F6FED" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="#2F6FED" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="bgLine" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#5B92F5" stop-opacity="0.55"/>
+        <stop offset="55%" stop-color="#2F6FED" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="#22B366" stop-opacity="0.4"/>
+      </linearGradient>
+    </defs>
+    <path d="M-40,420 C120,380 200,460 340,410 C480,360 540,300 680,320 C820,340 880,240 1020,210 C1120,188 1160,175 1220,150 L1220,620 L-40,620 Z" fill="url(#bgFill)"/>
+    <path d="M-40,420 C120,380 200,460 340,410 C480,360 540,300 680,320 C820,340 880,240 1020,210 C1120,188 1160,175 1220,150"
+      fill="none" stroke="url(#bgLine)" stroke-width="2"/>
+    <path d="M-40,500 C140,480 220,540 360,510 C500,480 560,430 700,450 C840,470 900,410 1040,390 C1120,378 1160,368 1220,352"
+      fill="none" stroke="#93A6C2" stroke-opacity="0.12" stroke-width="1.5"/>
+  </svg>
+
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="eyebrow">Day Trading Education &amp; Consulting</div>
+      <h1>Skill compounds.<br>Instinct doesn't.</h1>
+      <p class="lead">Downstream provides day trading education and 1:1 consulting for individual traders, built on a straightforward premise: consistent, disciplined execution of a defined strategy produces long-term results.</p>
+      <div class="hero-ctas">
+        <a href="#book" class="btn btn-primary">Book a 1:1 Consultation</a>
+        <a href="#services" class="btn btn-ghost">View Services</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="philosophy" id="philosophy">
+  <div class="wrap">
+    <div class="section-head" style="max-width:720px;">
+      <div class="eyebrow">Governing Principle</div>
+      <h2>Your results are downstream of your decisions.</h2>
+      <p>Not any single trade, but a defined body of decisions, executed consistently over time. Trading performance is the downstream consequence of process.</p>
+    </div>
+
+    <div class="philosophy-grid">
+      <div>
+        <div class="compounding-stats">
+          <div class="compounding-stat">
+            <div class="num" style="color:var(--blue-light);">100</div>
+            <div class="label">Trades</div>
+          </div>
+          <div class="compounding-stat">
+            <div class="num" style="color:var(--green);">1</div>
+            <div class="label">Year</div>
+          </div>
+          <div class="compounding-stat">
+            <div class="num" style="color:var(--red);">10,000</div>
+            <div class="label">Decisions</div>
+          </div>
+        </div>
+        <p class="compounding-caption">No professional trader is judged by one trade. Performance is measured across a career. A single trade is a moment. Downstream is the outcome of consistency.</p>
+      </div>
+
+      <div class="philosophy-points">
+        <div class="philosophy-point">
+          <h4>Consistent Execution</h4>
+          <p>Adhering to a defined strategy removes emotion from decision-making and produces repeatable outcomes over time.</p>
+        </div>
+        <div class="philosophy-point">
+          <h4>Compounding Discipline</h4>
+          <p>Incremental, disciplined decisions accumulate into long-term account performance. This is the underlying premise of every session.</p>
+        </div>
+        <div class="philosophy-point">
+          <h4>Risk Management</h4>
+          <p>Position sizing and capital preservation are addressed before trade selection, as a matter of standard practice.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Services</div>
+      <h2>Three ways to engage</h2>
+      <p>Each offering is structured to match where a trader currently stands: targeted guidance, ongoing instruction, or a review of existing trading activity.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="mono" style="color:var(--blue-light);">1:1 CONSULTING</div>
+        <h3>Private Consultation</h3>
+        <p>A focused, screen-shared session addressing strategy, risk parameters, and execution, tailored to your current trading activity and objectives.</p>
+        <div class="price">60 minutes · scheduled below</div>
+      </div>
+      <div class="service-card">
+        <div class="mono" style="color:var(--green);">TRAINING</div>
+        <h3>Structured Courses</h3>
+        <p>Multi-session instruction covering market structure and disciplined trade entry. Designed for traders building a consistent, repeatable process.</p>
+        <div class="price">Cohort &amp; self-paced options</div>
+      </div>
+      <div class="service-card">
+        <div class="mono" style="color:var(--red);">TRADE REVIEW</div>
+        <h3>Trade Log Audit</h3>
+        <p>A review of recent trading activity, evaluating entries, exits, sizing, and adherence to strategy. Available as a standalone service or added to a consultation.</p>
+        <div class="price">Add-on to any 1:1</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Process</div>
+      <h2>Scheduling a session</h2>
+    </div>
+    <div class="how-list">
+      <div class="how-step">
+        <div class="how-num mono">01</div>
+        <div>
+          <h4>Request a Time</h4>
+          <p>Submit the form below with a preferred date and time, along with a brief description of your current focus.</p>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-num mono">02</div>
+        <div>
+          <h4>Provide Materials</h4>
+          <p>In advance of the session, share relevant charts, trade logs, or specific questions to be addressed.</p>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-num mono">03</div>
+        <div>
+          <h4>Attend the Session</h4>
+          <p>A live, screen-shared consultation focused on your account and process, concluding with clear next steps.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="book" id="book">
+  <div class="wrap book-grid">
+    <div class="book-side">
+      <div class="eyebrow">Book a 1:1</div>
+      <h2>Schedule a consultation</h2>
+      <p>Complete the form to request a session. A confirmation, along with any relevant preparation notes, will follow by email.</p>
+      <div class="contact-line">
+        <strong>Direct contact</strong>
+        hello@downstreamtrading.com &nbsp;·&nbsp; Response within 1 business day
+      </div>
+    </div>
+
+    <div>
+      <form id="bookingForm">
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Jordan Lee" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@email.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="date">Preferred Date</label>
+            <input type="date" id="date" name="date" required>
+          </div>
+          <div class="field">
+            <label for="time">Preferred Time</label>
+            <input type="time" id="time" name="time" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="focus">Session Focus</label>
+          <select id="focus" name="focus">
+            <option>1:1 Consulting Session</option>
+            <option>Trade Log Review</option>
+            <option>Training / Course Inquiry</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="notes">Additional Notes</label>
+          <textarea id="notes" name="notes" placeholder="Markets traded, strategy, current objective, timeframe..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary form-submit">Request This Time →</button>
+        <p class="form-note">This opens a pre-filled email to confirm the requested time. No session is booked automatically.</p>
+        <div class="confirm-box" id="confirmBox">
+          <strong>Request drafted.</strong>
+          Your email application should now be open with the details filled in. Send it to confirm your request.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="logo">
+        <svg viewBox="0 0 28 28" fill="none">
+          <defs>
+            <linearGradient id="logoGradFooter" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#5B92F5"/>
+              <stop offset="100%" stop-color="#22B366"/>
+            </linearGradient>
+          </defs>
+          <path d="M2,22 H8 V16 H14 V10 H20 V4 H25" stroke="#5E7292" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+          <path d="M2,23 C7,20 6,14 12,13 C17,12 16,7 22,5 C24,4.3 25,4 26,3.6" stroke="url(#logoGradFooter)" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="26" cy="3.6" r="2.1" fill="#22B366"/>
+        </svg>
+        Downstream
+      </div>
+      <div class="footer-links">
+        <a href="#philosophy">Approach</a>
+        <a href="#services">Services</a>
+        <a href="#how">Process</a>
+        <a href="#book">Book a Consultation</a>
+      </div>
+    </div>
+    <p class="disclaimer">Downstream provides trading education and consulting for informational purposes only. Nothing presented constitutes financial, investment, or legal advice, and no outcome or return is guaranteed. Trading securities and derivatives involves substantial risk of loss and is not suitable for every investor. Past performance is not indicative of future results. Consult a licensed financial professional before making investment decisions.</p>
+    <div class="footer-bottom">
+      <span>© 2026 Downstream LLC. All rights reserved.</span>
+      <span>hello@downstreamtrading.com</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('bookingForm');
+  const confirmBox = document.getElementById('confirmBox');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    const focus = document.getElementById('focus').value;
+    const notes = document.getElementById('notes').value.trim();
+
+    const subject = encodeURIComponent(`1:1 Session Request: ${name}`);
+    const body = encodeURIComponent(
+`New session request via the Downstream site:
+
+Name: ${name}
+Email: ${email}
+Preferred date: ${date}
+Preferred time: ${time}
+Focus: ${focus}
+Notes: ${notes || 'None provided'}`
+    );
+
+    window.location.href = `mailto:hello@downstreamtrading.com?subject=${subject}&body=${body}`;
+
+    confirmBox.style.display = 'block';
+    confirmBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+</script>
+
+</body>
+</html>
